@@ -1,0 +1,113 @@
+.property-card {
+  background: var(--color-white);
+  border: 0.1rem solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.property-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-0.4rem);
+}
+
+.property-card__image-wrap {
+  height: 21rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.property-card__image {
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  width: 100%;
+}
+
+.property-card:hover .property-card__image {
+  transform: scale(1.04);
+}
+
+.property-card__availability {
+  background: var(--color-white);
+  bottom: 1.2rem;
+  color: var(--color-success);
+  font-size: 1.15rem;
+  font-weight: 700;
+  left: 1.2rem;
+  padding: 0.55rem 0.8rem;
+  position: absolute;
+}
+
+.property-card__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1.9rem;
+}
+
+.property-card__rent {
+  color: var(--color-primary-dark);
+  font-size: 1.85rem;
+  font-weight: 700;
+}
+
+.property-card__rent span {
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.property-card h2 {
+  font-size: 2rem;
+  margin-top: 0.75rem;
+}
+
+.property-card__location {
+  font-size: 1.35rem;
+  margin-top: 0.55rem;
+}
+
+.property-card__details {
+  border-top: 0.1rem solid var(--color-border);
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 1.45rem;
+  padding-top: 1.25rem;
+}
+
+.property-card__details span {
+  color: var(--color-text-secondary);
+  font-size: 1.25rem;
+}
+
+.property-card__amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  list-style: none;
+  margin: 1.3rem 0 1.8rem;
+  padding: 0;
+}
+
+.property-card__amenities li {
+  background: var(--color-bg-soft);
+  color: var(--color-primary-dark);
+  font-size: 1.15rem;
+  padding: 0.45rem 0.65rem;
+}
+
+.property-card__link {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-top: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .property-card,
+  .property-card__image {
+    transition: none;
+  }
+}

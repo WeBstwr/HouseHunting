@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { featuredProperties, houseTypes, locations, steps } from '../../store/homeData'
+import { featuredProperties, houseTypes, locations } from '../../data/listingData'
+import { steps } from '../../data/homeData'
 import './home.css'
 
 const Home = () => {
