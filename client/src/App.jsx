@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Listings from "./pages/Listings/Listings";
 import SingleListing from "./pages/SingleListing/SingleListing";
+import AddProperty from "./pages/AddProperty/AddProperty";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/listings" element={<Listings />} />
         <Route path="/listings/:id" element={<SingleListing />} />
+        <Route path="/add-property" element={<AddProperty />} />
       </Routes>
       <Footer />
     </BrowserRouter>
