@@ -27,6 +27,6 @@ export const listingProperties = [
   { id: 'eldoret-garden-house', title: 'Quiet Garden House', location: 'Eldoret', rent: 'KES 22,000', price: 22000, type: '3 Bedroom', typeKey: '3-bedroom', bedrooms: '3 beds', bedroomCount: 3, availability: 'Available now', amenities: ['Parking', 'Security', 'Water included'], image: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=900&q=80', createdAt: '2026-08-30' },
   { id: 'kiambu-furnished-studio', title: 'Furnished Studio', location: 'Kiambu', rent: 'KES 15,500', price: 15500, type: 'Bedsitter', typeKey: 'bedsitter', bedrooms: 'Studio', bedroomCount: 0, availability: 'Available now', amenities: ['Furnished', 'Security', 'Near transport'], image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80', createdAt: '2026-08-28' },
   { id: 'westlands-city-apartment', title: 'City Edge Apartment', location: 'Westlands, Nairobi', rent: 'KES 42,000', price: 42000, type: '1 Bedroom', typeKey: '1-bedroom', bedrooms: '1 bed', bedroomCount: 1, availability: 'Viewing open', amenities: ['Furnished', 'Security', 'Parking', 'Balcony'], image: 'https://images.unsplash.com/photo-1600607687644-c7171b42498a?auto=format&fit=crop&w=900&q=80', createdAt: '2026-08-25' },
-]
+].map((property) => ({ ...property, ownerId: 'mock-landlord-1' }))
 
 export const featuredProperties = listingProperties.slice(0, 4)

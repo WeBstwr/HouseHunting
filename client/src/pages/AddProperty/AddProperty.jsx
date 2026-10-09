@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { houseTypes, listingAmenities } from '../../data/listingData'
+import useAuthStore from '../../store/authStore'
 import useListingStore from '../../store/listingStore'
 import './addproperty.css'
 
@@ -20,6 +21,7 @@ const readImageFile = (file) => new Promise((resolve, reject) => {
 })
 
 const AddProperty = () => {
+  const currentUser = useAuthStore((state) => state.user)
   const addProperty = useListingStore((state) => state.addProperty)
   const [form, setForm] = useState(initialForm)
   const [amenities, setAmenities] = useState([])
@@ -101,7 +103,14 @@ const AddProperty = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    if (isSubmitting || submittedPropertyId || !validate()) return
+    if (isSubmitting || submittedPropertyId) return
+
+    if (!currentUser || currentUser.role !== 'landlord') {
+      setErrors((current) => ({ ...current, submission: 'A landlord mock session is required to add a property.' }))
+      return
+    }
+
+    if (!validate()) return
 
     setIsSubmitting(true)
     const selectedType = houseTypes.find((type) => type.query === form.type)
@@ -110,6 +119,7 @@ const AddProperty = () => {
     const uniqueSuffix = globalThis.crypto?.randomUUID?.().slice(0, 8) || Date.now().toString(36)
     const property = {
       id: `${idBase || 'property'}-${uniqueSuffix}`,
+      ownerId: currentUser.id,
       title: form.title.trim(),
       location: [form.estate.trim(), form.town.trim(), form.county.trim()].filter(Boolean).join(', '),
       address: form.address.trim(),
@@ -223,7 +233,7 @@ const AddProperty = () => {
             </div>
           </section>
 
-          <div className="add-property__footer"><p>Listings added here are stored only in this browser session until backend integration is available.</p><button className="add-property__submit" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Adding listing...' : 'Add property listing'}</button></div>
+          <div className="add-property__footer"><div><p>Listings added here are stored only in this browser session until backend integration is available.</p>{errors.submission && <p className="add-property__error">{errors.submission}</p>}</div><button className="add-property__submit" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Adding listing...' : 'Add property listing'}</button></div>
         </form>
       </section>
     </main>

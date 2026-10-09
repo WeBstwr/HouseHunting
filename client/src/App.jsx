@@ -5,8 +5,10 @@ import Home from "./pages/Home/Home";
 import Listings from "./pages/Listings/Listings";
 import SingleListing from "./pages/SingleListing/SingleListing";
 import AddProperty from "./pages/AddProperty/AddProperty";
+import Login from "./components/Header/Login/Login";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 const App = () => {
   return (
     <BrowserRouter>
@@ -15,7 +17,8 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/listings" element={<Listings />} />
         <Route path="/listings/:id" element={<SingleListing />} />
-        <Route path="/add-property" element={<AddProperty />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/add-property" element={<ProtectedRoute allowedRoles="landlord"><AddProperty /></ProtectedRoute>} />
       </Routes>
       <Footer />
     </BrowserRouter>
