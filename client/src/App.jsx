@@ -5,6 +5,7 @@ import Home from "./pages/Home/Home";
 import Listings from "./pages/Listings/Listings";
 import SingleListing from "./pages/SingleListing/SingleListing";
 import AddProperty from "./pages/AddProperty/AddProperty";
+import MyListings from "./pages/MyListings/MyListings";
 import Login from "./components/Header/Login/Login";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/listings/:id" element={<SingleListing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/add-property" element={<ProtectedRoute allowedRoles="landlord"><AddProperty /></ProtectedRoute>} />
+        <Route path="/my-listings" element={<ProtectedRoute allowedRoles="landlord"><MyListings /></ProtectedRoute>} />
       </Routes>
       <Footer />
     </BrowserRouter>

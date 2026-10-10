@@ -8,6 +8,7 @@ const Login = () => {
   const user = useAuthStore((state) => state.user)
   const loginAsTenant = useAuthStore((state) => state.loginAsTenant)
   const loginAsLandlord = useAuthStore((state) => state.loginAsLandlord)
+  const loginAsLandlordB = useAuthStore((state) => state.loginAsLandlordB)
   const logout = useAuthStore((state) => state.logout)
   const destination = location.state?.from?.pathname || '/'
 
@@ -28,6 +29,7 @@ const Login = () => {
         <div className="mock-login__actions">
           <button type="button" onClick={() => selectMockUser(loginAsTenant)}>Continue as tenant</button>
           <button type="button" onClick={() => selectMockUser(loginAsLandlord)}>Continue as landlord</button>
+          <button type="button" onClick={() => selectMockUser(loginAsLandlordB)}>Continue as landlord B</button>
         </div>
 
         {user && <button className="mock-login__logout" type="button" onClick={logout}>Log out</button>}

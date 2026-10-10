@@ -3,12 +3,14 @@ import { create } from 'zustand'
 export const mockUsers = {
   tenant: { id: 'mock-tenant-1', role: 'tenant', name: 'Mock Tenant' },
   landlord: { id: 'mock-landlord-1', role: 'landlord', name: 'Mock Landlord' },
+  landlordB: { id: 'mock-landlord-2', role: 'landlord', name: 'Mock Landlord B' },
 }
 
 const useAuthStore = create((set, get) => ({
   user: null,
   loginAsTenant: () => set({ user: mockUsers.tenant }),
   loginAsLandlord: () => set({ user: mockUsers.landlord }),
+  loginAsLandlordB: () => set({ user: mockUsers.landlordB }),
   logout: () => set({ user: null }),
   isAuthenticated: () => Boolean(get().user),
   hasRole: (roles) => {
