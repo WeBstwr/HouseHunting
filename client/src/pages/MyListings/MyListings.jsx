@@ -7,13 +7,15 @@ import './mylistings.css'
 
 const MyListings = () => {
   const user = useAuthStore((state) => state.user)
+  const canManageProperty = useAuthStore((state) => state.canManageProperty)
   const properties = useListingStore((state) => state.properties)
-  const ownedProperties = useMemo(
-    () => properties.filter((property) => property.ownerId === user?.id),
-    [properties, user?.id],
+  const managedProperties = useMemo(
+    () => properties.filter(canManageProperty),
+    [canManageProperty, properties],
   )
+  const isLandlord = user?.role === 'landlord'
 
-  if (!user || user.role !== 'landlord') {
+  if (!user || !['landlord', 'agent'].includes(user.role)) {
     return null
   }
 
@@ -22,11 +24,11 @@ const MyListings = () => {
       <section className="my-listings__hero">
         <div className="container my-listings__hero-content">
           <div>
-            <p className="my-listings__eyebrow">Landlord space</p>
+            <p className="my-listings__eyebrow">{isLandlord ? 'Landlord space' : 'Agent workspace'}</p>
             <h1>My listings</h1>
-            <p>Manage the properties listed under your current mock landlord account.</p>
+            <p>{isLandlord ? 'Manage the properties listed under your current mock landlord account.' : 'Review the properties that have been explicitly assigned to your agent account.'}</p>
           </div>
-          <Link className="my-listings__add-link" to="/add-property">Add property</Link>
+          {isLandlord && <Link className="my-listings__add-link" to="/add-property">Add property</Link>}
         </div>
       </section>
 
@@ -34,21 +36,21 @@ const MyListings = () => {
         <div className="my-listings__results-heading">
           <div>
             <p className="my-listings__eyebrow">Your portfolio</p>
-            <h2 id="my-listings-results-title">{ownedProperties.length} {ownedProperties.length === 1 ? 'property' : 'properties'} listed</h2>
+            <h2 id="my-listings-results-title">{managedProperties.length} {managedProperties.length === 1 ? 'property' : 'properties'} {isLandlord ? 'listed' : 'assigned'}</h2>
           </div>
-          <p>Only properties owned by {user.name} are shown here.</p>
+          <p>{isLandlord ? `Only properties owned by ${user.name} are shown here.` : 'Only properties assigned to this agent are shown here.'}</p>
         </div>
 
-        {ownedProperties.length > 0 ? (
+        {managedProperties.length > 0 ? (
           <div className="my-listings__grid">
-            {ownedProperties.map((property) => <PropertyCard key={property.id} property={property} />)}
+            {managedProperties.map((property) => <PropertyCard key={property.id} property={property} />)}
           </div>
         ) : (
           <section className="my-listings__empty" aria-labelledby="my-listings-empty-title">
             <p className="my-listings__eyebrow">No listings yet</p>
-            <h2 id="my-listings-empty-title">Ready to list your first property?</h2>
-            <p>Properties you add while signed in as this mock landlord will appear here.</p>
-            <Link className="my-listings__add-link" to="/add-property">Add property</Link>
+            <h2 id="my-listings-empty-title">{isLandlord ? 'Ready to list your first property?' : 'No properties are assigned to you yet.'}</h2>
+            <p>{isLandlord ? 'Properties you add while signed in as this mock landlord will appear here.' : 'An owner must assign this agent account to a property before it appears here.'}</p>
+            {isLandlord && <Link className="my-listings__add-link" to="/add-property">Add property</Link>}
           </section>
         )}
       </section>

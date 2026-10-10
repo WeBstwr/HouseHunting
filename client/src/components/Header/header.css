@@ -40,7 +40,9 @@
 
 .header__nav-link,
 .header__auth-link,
-.header__register-link {
+.header__register-link,
+.header__session-label,
+.header__logout {
   color: var(--color-text-secondary);
   font-size: 1.5rem;
   font-weight: 600;
@@ -90,6 +92,22 @@
   color: var(--color-primary);
 }
 
+.header__session-label {
+  color: var(--color-primary-dark);
+}
+
+.header__logout {
+  padding: 0;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.header__logout:hover {
+  color: var(--color-primary);
+}
+
 .header__cta {
   display: inline-flex;
   align-items: center;
@@ -119,7 +137,8 @@
 }
 
 .site-header a:focus-visible,
-.site-header__menu-button:focus-visible {
+.site-header__menu-button:focus-visible,
+.header__logout:focus-visible {
   outline: 0.3rem solid rgba(23, 107, 135, 0.28);
   outline-offset: 0.35rem;
 }
@@ -240,7 +259,9 @@
   }
 
   .site-header__mobile-actions .header__auth-link,
-  .site-header__mobile-actions .header__register-link {
+  .site-header__mobile-actions .header__register-link,
+  .site-header__mobile-actions .header__session-label,
+  .site-header__mobile-actions .header__logout {
     width: fit-content;
   }
 
