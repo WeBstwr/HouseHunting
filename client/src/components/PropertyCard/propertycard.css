@@ -99,10 +99,22 @@
   padding: 0.45rem 0.65rem;
 }
 
-.property-card__link {
+.property-card__actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+  margin-top: auto;
+}
+
+.property-card__link,
+.property-card__edit-link {
   font-size: 1.4rem;
   font-weight: 700;
-  margin-top: auto;
+}
+
+.property-card__edit-link {
+  color: var(--color-primary-dark);
 }
 
 @media (prefers-reduced-motion: reduce) {

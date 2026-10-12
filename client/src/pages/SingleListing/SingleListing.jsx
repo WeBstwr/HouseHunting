@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import PropertyCard from '../../components/PropertyCard/PropertyCard'
 import PropertyGallery from '../../components/PropertyGallery/PropertyGallery'
 import useListingStore from '../../store/listingStore'
@@ -8,6 +8,7 @@ import './singlelisting.css'
 
 const SingleListing = () => {
   const { id } = useParams()
+  const location = useLocation()
   const properties = useListingStore((state) => state.properties)
   const savedPropertyIds = useSavedHouseStore((state) => state.savedPropertyIds)
   const toggleSavedProperty = useSavedHouseStore((state) => state.toggleSavedProperty)
@@ -79,6 +80,8 @@ const SingleListing = () => {
           {contactNotice && <p className="single-listing__contact-notice" role="status">{contactNotice}</p>}
         </aside>
       </section>
+
+      {location.state?.notice && <p className="container single-listing__contact-notice" role="status">{location.state.notice}</p>}
 
       <section className="container single-listing__body">
         <div className="single-listing__main-content">

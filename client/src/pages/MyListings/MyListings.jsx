@@ -43,7 +43,7 @@ const MyListings = () => {
 
         {managedProperties.length > 0 ? (
           <div className="my-listings__grid">
-            {managedProperties.map((property) => <PropertyCard key={property.id} property={property} />)}
+            {managedProperties.map((property) => <PropertyCard editTo={`/edit-property/${property.id}`} key={property.id} property={property} />)}
           </div>
         ) : (
           <section className="my-listings__empty" aria-labelledby="my-listings-empty-title">

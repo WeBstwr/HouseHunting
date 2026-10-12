@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import './propertycard.css'
 
-const PropertyCard = ({ property }) => (
+const PropertyCard = ({ property, editTo }) => (
   <article className="property-card">
     <div className="property-card__image-wrap">
       <img className="property-card__image" src={property.image} alt={`${property.title} in ${property.location}`} />
@@ -18,7 +18,10 @@ const PropertyCard = ({ property }) => (
       <ul className="property-card__amenities" aria-label="Property features">
         {property.amenities.slice(0, 3).map((amenity) => <li key={amenity}>{amenity}</li>)}
       </ul>
-      <Link className="property-card__link" to={`/listings/${property.id}`}>View property</Link>
+      <div className="property-card__actions">
+        <Link className="property-card__link" to={`/listings/${property.id}`}>View property</Link>
+        {editTo && <Link className="property-card__edit-link" to={editTo}>Edit property</Link>}
+      </div>
     </div>
   </article>
 )
