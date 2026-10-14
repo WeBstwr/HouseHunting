@@ -7,7 +7,10 @@ const useListingStore = create((set) => ({
   addProperty: (property) => set((state) => ({ properties: [property, ...state.properties] })),
   updateProperty: (propertyId, updates) => {
     let updated = false
-    const { id, ownerId, managedByAgentIds, ...editableUpdates } = updates
+    const editableUpdates = { ...updates }
+    delete editableUpdates.id
+    delete editableUpdates.ownerId
+    delete editableUpdates.managedByAgentIds
 
     set((state) => ({
       properties: state.properties.map((property) => {

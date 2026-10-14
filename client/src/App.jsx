@@ -1,4 +1,3 @@
-import React from 'react'
 import "./assets/globals.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
@@ -6,6 +5,8 @@ import Listings from "./pages/Listings/Listings";
 import SingleListing from "./pages/SingleListing/SingleListing";
 import AddProperty from "./pages/AddProperty/AddProperty";
 import EditProperty from "./pages/EditProperty/EditProperty";
+import LandlordDashboard from "./pages/LandlordDashboard/LandlordDashboard";
+import AgentDashboard from "./pages/AgentDashboard/AgentDashboard";
 import MyListings from "./pages/MyListings/MyListings";
 import Login from "./components/Header/Login/Login";
 import Register from "./components/Header/Register/Register";
@@ -27,6 +28,8 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/add-property" element={<ProtectedRoute allowedRoles="landlord"><AddProperty /></ProtectedRoute>} />
+        <Route path="/landlord-dashboard" element={<ProtectedRoute allowedRoles="landlord"><LandlordDashboard /></ProtectedRoute>} />
+        <Route path="/agent-dashboard" element={<ProtectedRoute allowedRoles="agent"><AgentDashboard /></ProtectedRoute>} />
         <Route path="/edit-property/:id" element={<ProtectedRoute allowedRoles={['landlord', 'agent']}><EditProperty /></ProtectedRoute>} />
         <Route path="/my-listings" element={<ProtectedRoute allowedRoles={['landlord', 'agent']}><MyListings /></ProtectedRoute>} />
       </Routes>

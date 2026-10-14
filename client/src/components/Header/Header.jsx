@@ -57,6 +57,7 @@ const Header = () => {
     if (user.role === 'landlord') {
       return (
         <>
+          <NavLink className="header__auth-link" onClick={closeOnMobile} to="/landlord-dashboard">Dashboard</NavLink>
           <NavLink className="header__auth-link" onClick={closeOnMobile} to="/my-listings">My Listings</NavLink>
           <Link className="header__cta" onClick={closeOnMobile} to="/add-property">Add Property</Link>
           <button className="header__logout" onClick={handleLogout} type="button">Log out</button>
@@ -67,6 +68,7 @@ const Header = () => {
     if (user.role === 'agent') {
       return (
         <>
+          <NavLink className="header__auth-link" onClick={closeOnMobile} to="/agent-dashboard">Dashboard</NavLink>
           <NavLink className="header__auth-link" onClick={closeOnMobile} to="/my-listings">Managed Listings</NavLink>
           <button className="header__logout" onClick={handleLogout} type="button">Log out</button>
         </>

@@ -58,7 +58,7 @@ const EditProperty = () => {
     setAmenities(Array.isArray(property.amenities) ? property.amenities : [])
     setImages(toImageItems(property))
     setErrors({})
-  }, [id])
+  }, [id, property])
 
   const handleChange = (event) => {
     const { name, value } = event.target

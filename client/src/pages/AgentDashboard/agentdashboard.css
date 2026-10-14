@@ -1,0 +1,5 @@
+.management-dashboard__stats--single { grid-template-columns: minmax(0, 32rem); }
+.management-dashboard__property { background: var(--color-white); border: 0.1rem solid var(--color-border); }
+.management-dashboard__property .property-card { border: 0; }
+.management-dashboard__property > p { border-top: 0.1rem solid var(--color-border); color: var(--color-text-secondary); font-size: 1.3rem; padding: 1.2rem 1.9rem; }
+@media (max-width: 560px) { .management-dashboard__stats--single { grid-template-columns: 1fr; } }
