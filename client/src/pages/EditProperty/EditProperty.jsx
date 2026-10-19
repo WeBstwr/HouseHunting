@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { houseTypes, listingAmenities } from '../../data/listingData'
 import useAuthStore from '../../store/authStore'
 import useListingStore from '../../store/listingStore'
+import { isGoogleMapsUrl, normaliseGoogleMapsUrl } from '../../utils/googleMaps'
 import './editproperty.css'
 
 const MAX_IMAGES = 5
@@ -28,6 +29,7 @@ const createForm = (property) => {
     town: property.town || (hasCounty ? locationParts.at(-2) : locationParts[0] || ''),
     estate: property.estate || (locationParts.length > 2 ? locationParts.slice(0, -2).join(', ') : ''),
     address: property.address || '',
+    googleMapsUrl: property.googleMapsUrl || '',
   }
 }
 
@@ -110,6 +112,7 @@ const EditProperty = () => {
     if (form.bathrooms === '' || !Number.isInteger(bathrooms) || bathrooms < 0) nextErrors.bathrooms = 'Choose the number of bathrooms.'
     if (!form.county.trim()) nextErrors.county = 'Enter the county.'
     if (!form.town.trim()) nextErrors.town = 'Enter the town or city.'
+    if (form.googleMapsUrl.trim() && !isGoogleMapsUrl(form.googleMapsUrl)) nextErrors.googleMapsUrl = 'Enter a valid HTTPS Google Maps link.'
     if (!images.length) nextErrors.images = 'Keep at least one property image.'
 
     setErrors(nextErrors)
@@ -133,6 +136,7 @@ const EditProperty = () => {
       title: form.title.trim(),
       location: [form.estate.trim(), form.town.trim(), form.county.trim()].filter(Boolean).join(', '),
       address: form.address.trim(),
+      googleMapsUrl: normaliseGoogleMapsUrl(form.googleMapsUrl),
       description: form.description.trim(),
       rent: `KES ${Number(form.price).toLocaleString('en-KE')}`,
       price: Number(form.price),
@@ -221,6 +225,7 @@ const EditProperty = () => {
               <div className="add-property__field"><label htmlFor="property-town">Town or city <span aria-hidden="true">*</span></label><input id="property-town" name="town" value={form.town} onChange={handleChange} aria-invalid={Boolean(errors.town)} />{errors.town && <p className="add-property__error">{errors.town}</p>}</div>
               <div className="add-property__field"><label htmlFor="property-estate">Estate or neighbourhood</label><input id="property-estate" name="estate" value={form.estate} onChange={handleChange} /></div>
               <div className="add-property__field add-property__field--full"><label htmlFor="property-address">Location description</label><input id="property-address" name="address" value={form.address} onChange={handleChange} /></div>
+              <div className="add-property__field add-property__field--full"><label htmlFor="property-google-maps-url">Google Maps link (optional)</label><input id="property-google-maps-url" name="googleMapsUrl" type="url" value={form.googleMapsUrl} onChange={handleChange} aria-invalid={Boolean(errors.googleMapsUrl)} placeholder="https://maps.google.com/..." />{errors.googleMapsUrl && <p className="add-property__error">{errors.googleMapsUrl}</p>}</div>
             </div>
           </section>
 

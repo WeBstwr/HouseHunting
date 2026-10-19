@@ -4,6 +4,7 @@ import PropertyCard from '../../components/PropertyCard/PropertyCard'
 import PropertyGallery from '../../components/PropertyGallery/PropertyGallery'
 import useListingStore from '../../store/listingStore'
 import useSavedHouseStore from '../../store/savedHouseStore'
+import { normaliseGoogleMapsUrl } from '../../utils/googleMaps'
 import './singlelisting.css'
 
 const SingleListing = () => {
@@ -49,6 +50,7 @@ const SingleListing = () => {
   const isSaved = savedPropertyIds.includes(property.id)
   const description = property.description || `${property.title} is an available ${property.type.toLowerCase()} in ${property.location}. Review the property features, then arrange your next step when you are ready.`
   const listedDate = new Intl.DateTimeFormat('en-KE', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(property.createdAt))
+  const googleMapsUrl = normaliseGoogleMapsUrl(property.googleMapsUrl)
 
   return (
     <main className="single-listing">
@@ -112,6 +114,7 @@ const SingleListing = () => {
           <div className="single-listing__location-panel">
             <h3>Location</h3>
             <p>{property.location}</p>
+            {googleMapsUrl && <a className="single-listing__maps-link" href={googleMapsUrl} rel="noopener noreferrer" target="_blank">Get directions</a>}
             <small>Exact directions can be confirmed directly with the property owner.</small>
           </div>
         </aside>

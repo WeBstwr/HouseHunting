@@ -221,6 +221,13 @@
   margin-top: 0.55rem;
 }
 
+.single-listing__maps-link {
+  display: inline-block;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 1.1rem;
+}
+
 .single-listing__location-panel small {
   display: block;
   line-height: 1.5;
