@@ -6,8 +6,8 @@ export const mockAccountIds = {
 }
 
 export const mockAccounts = [
-  { id: mockAccountIds.tenant, name: 'Demo Tenant', email: 'tenant1@househunting.test', role: 'tenant' },
-  { id: mockAccountIds.landlordA, name: 'Demo Landlord A', email: 'landlord1@househunting.test', role: 'landlord' },
-  { id: mockAccountIds.landlordB, name: 'Demo Landlord B', email: 'landlord2@househunting.test', role: 'landlord' },
-  { id: mockAccountIds.agent, name: 'Demo Property Agent', email: 'agent1@househunting.test', role: 'agent' },
+  { id: mockAccountIds.tenant, name: 'Amina Wanjiku', email: 'tenant1@househunting.test', password: 'HouseHunting123', role: 'tenant' },
+  { id: mockAccountIds.landlordA, name: 'Brian Otieno', email: 'landlord1@househunting.test', password: 'HouseHunting123', role: 'landlord' },
+  { id: mockAccountIds.landlordB, name: 'Caroline Njeri', email: 'landlord2@househunting.test', password: 'HouseHunting123', role: 'landlord' },
+  { id: mockAccountIds.agent, name: 'David Mwangi', email: 'agent1@househunting.test', password: 'HouseHunting123', role: 'agent' },
 ]

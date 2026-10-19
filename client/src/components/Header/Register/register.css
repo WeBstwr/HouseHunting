@@ -7,7 +7,10 @@
 .mock-register__form label { color: var(--color-text-primary); font-size: 1.4rem; font-weight: 700; }
 .mock-register__form input, .mock-register__form select { border: 0.1rem solid var(--color-border); min-height: 4.6rem; padding: 1rem 1.2rem; }
 .mock-register__form button { border-radius: 0; margin-top: 0.5rem; }
+.mock-register__password-field { display: flex; }
+.mock-register__password-field input { min-width: 0; width: 100%; }
+.mock-register__password-field button { background: var(--color-bg-soft); border: 0.1rem solid var(--color-border); border-left: 0; color: var(--color-primary-dark); flex: 0 0 auto; font-size: 1.25rem; font-weight: 700; margin: 0; padding: 0 1.2rem; }
 .mock-register__message { background: var(--color-bg-soft); color: var(--color-danger); font-size: 1.4rem; margin: 0.3rem 0; padding: 1rem; }
-.mock-register__message[role='status'] { color: var(--color-primary-dark); }
+.mock-register__field-note { color: var(--color-text-muted); font-size: 1.25rem; margin: -0.1rem 0 0; }
 .mock-register__login { font-size: 1.35rem; margin: 1.8rem 0 0; }
 @media (max-width: 500px) { .mock-register__card { padding: 3rem 2rem; } }
