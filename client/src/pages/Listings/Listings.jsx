@@ -5,29 +5,60 @@ import PropertyCard from '../../components/PropertyCard/PropertyCard'
 import { houseTypes, listingAmenities } from '../../data/listingData'
 import useFilterStore, { defaultListingFilters } from '../../store/filterStore'
 import useListingStore from '../../store/listingStore'
+import { getPropertyLocationSearchText } from '../../utils/propertyLocation'
 import './listings.css'
 
-const filtersFromSearchParams = (searchParams) => ({
-  ...defaultListingFilters,
-  location: searchParams.get('location') || '',
-  type: searchParams.get('type') || '',
-  minPrice: searchParams.get('minPrice') || '',
-  maxPrice: searchParams.get('maxPrice') || searchParams.get('price') || '',
-  bedrooms: searchParams.get('bedrooms') || '',
-  amenity: searchParams.get('amenity') || '',
-  sort: searchParams.get('sort') || 'newest',
-})
+const supportedBedroomFilters = new Set(['0', '1', '2', '3', '4+'])
+const supportedSorts = new Set(['newest', 'price-low', 'price-high'])
+
+const normalisePriceFilter = (value) => {
+  if (!value?.trim()) return ''
+  const price = Number(value)
+  return Number.isFinite(price) && price >= 0 ? String(price) : ''
+}
+
+const filtersFromSearchParams = (searchParams, availabilityOptions) => {
+  const selectedAmenities = [...new Set(searchParams.getAll('amenity').filter((amenity) => listingAmenities.includes(amenity)))]
+  const type = searchParams.get('type') || ''
+  const bedrooms = searchParams.get('bedrooms') || ''
+  const availability = searchParams.get('availability') || ''
+  const sort = searchParams.get('sort') || 'newest'
+
+  return {
+    ...defaultListingFilters,
+    keyword: searchParams.get('keyword')?.trim() || '',
+    location: searchParams.get('location')?.trim() || '',
+    type: houseTypes.some((houseType) => houseType.query === type) ? type : '',
+    minPrice: normalisePriceFilter(searchParams.get('minPrice')),
+    maxPrice: normalisePriceFilter(searchParams.get('maxPrice') || searchParams.get('price')),
+    bedrooms: supportedBedroomFilters.has(bedrooms) ? bedrooms : '',
+    amenities: selectedAmenities,
+    availability: availabilityOptions.includes(availability) ? availability : '',
+    sort: supportedSorts.has(sort) ? sort : 'newest',
+  }
+}
 
 const searchParamsFromFilters = (filters) => {
   const searchParams = new URLSearchParams()
-  if (filters.location) searchParams.set('location', filters.location)
+  if (filters.keyword.trim()) searchParams.set('keyword', filters.keyword.trim())
+  if (filters.location.trim()) searchParams.set('location', filters.location.trim())
   if (filters.type) searchParams.set('type', filters.type)
   if (filters.minPrice) searchParams.set('minPrice', filters.minPrice)
   if (filters.maxPrice) searchParams.set('maxPrice', filters.maxPrice)
   if (filters.bedrooms) searchParams.set('bedrooms', filters.bedrooms)
-  if (filters.amenity) searchParams.set('amenity', filters.amenity)
+  filters.amenities.forEach((amenity) => searchParams.append('amenity', amenity))
+  if (filters.availability) searchParams.set('availability', filters.availability)
   if (filters.sort !== 'newest') searchParams.set('sort', filters.sort)
   return searchParams
+}
+
+const getBedroomCount = (property) => {
+  if (Number.isFinite(property.bedroomCount)) return property.bedroomCount
+  if (typeof property.bedrooms !== 'string') return undefined
+  if (property.bedrooms.trim().toLowerCase() === 'studio') return 0
+
+  const bedroomMatch = property.bedrooms.match(/\d+/)
+  return bedroomMatch ? Number(bedroomMatch[0]) : undefined
 }
 
 const Listings = () => {
@@ -37,36 +68,65 @@ const Listings = () => {
   const setFilters = useFilterStore((state) => state.setFilters)
   const updateFilter = useFilterStore((state) => state.updateFilter)
   const resetFilters = useFilterStore((state) => state.resetFilters)
+  const availabilityOptions = useMemo(
+    () => [...new Set(properties.map((property) => property.availability).filter(Boolean))],
+    [properties],
+  )
 
   useEffect(() => {
-    setFilters(filtersFromSearchParams(searchParams))
-  }, [searchParams, setFilters])
+    setFilters(filtersFromSearchParams(searchParams, availabilityOptions))
+  }, [availabilityOptions, searchParams, setFilters])
 
   const matchingProperties = useMemo(() => {
     const minimumPrice = Number(filters.minPrice) || 0
     const maximumPrice = Number(filters.maxPrice) || Number.POSITIVE_INFINITY
+    const keyword = filters.keyword.trim().toLowerCase()
     const location = filters.location.trim().toLowerCase()
 
-    const results = properties.filter((property) => (
-      (!location || property.location.toLowerCase().includes(location))
-      && (!filters.type || property.typeKey === filters.type)
-      && property.price >= minimumPrice
-      && property.price <= maximumPrice
-      && (!filters.bedrooms || property.bedroomCount === Number(filters.bedrooms))
-      && (!filters.amenity || property.amenities.includes(filters.amenity))
-    ))
+    const results = properties.filter((property) => {
+      const locationText = getPropertyLocationSearchText(property)
+      const keywordText = [property.title, property.description, locationText].filter(Boolean).join(' ').toLowerCase()
+      const price = Number(property.price)
+      const bedroomCount = getBedroomCount(property)
+      const propertyAmenities = Array.isArray(property.amenities) ? property.amenities : []
+      const matchesBedrooms = !filters.bedrooms
+        || filters.bedrooms === '4+' && bedroomCount >= 4
+        || filters.bedrooms !== '4+' && bedroomCount === Number(filters.bedrooms)
+
+      return (
+        (!keyword || keywordText.includes(keyword))
+        && (!location || locationText.includes(location))
+        && (!filters.type || property.typeKey === filters.type)
+        && Number.isFinite(price) && price >= minimumPrice && price <= maximumPrice
+        && matchesBedrooms
+        && filters.amenities.every((amenity) => propertyAmenities.includes(amenity))
+        && (!filters.availability || property.availability === filters.availability)
+      )
+    })
 
     return [...results].sort((first, second) => {
       if (filters.sort === 'price-low') return first.price - second.price
       if (filters.sort === 'price-high') return second.price - first.price
-      return new Date(second.createdAt) - new Date(first.createdAt)
+      return (Date.parse(second.createdAt) || 0) - (Date.parse(first.createdAt) || 0)
     })
   }, [filters, properties])
+
+  const updateUrlFilters = (nextFilters) => {
+    setFilters(nextFilters)
+    setSearchParams(searchParamsFromFilters(nextFilters), { replace: true })
+  }
 
   const handleFilterChange = (event) => {
     const nextFilters = { ...filters, [event.target.name]: event.target.value }
     updateFilter(event.target.name, event.target.value)
     setSearchParams(searchParamsFromFilters(nextFilters), { replace: true })
+  }
+
+  const handleAmenityToggle = (amenity) => {
+    const amenities = filters.amenities.includes(amenity)
+      ? filters.amenities.filter((item) => item !== amenity)
+      : [...filters.amenities, amenity]
+    updateUrlFilters({ ...filters, amenities })
   }
 
   const handleResetFilters = () => {
@@ -91,6 +151,8 @@ const Listings = () => {
             filters={filters}
             houseTypes={houseTypes}
             amenities={listingAmenities}
+            availabilityOptions={availabilityOptions}
+            onAmenityToggle={handleAmenityToggle}
             onChange={handleFilterChange}
             onReset={handleResetFilters}
           />

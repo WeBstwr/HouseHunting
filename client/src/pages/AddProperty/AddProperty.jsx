@@ -4,6 +4,7 @@ import { houseTypes, listingAmenities } from '../../data/listingData'
 import useAuthStore from '../../store/authStore'
 import useListingStore from '../../store/listingStore'
 import { isGoogleMapsUrl, normaliseGoogleMapsUrl } from '../../utils/googleMaps'
+import { createPropertyLocation } from '../../utils/propertyLocation'
 import './addproperty.css'
 
 const MAX_IMAGES = 5
@@ -123,7 +124,10 @@ const AddProperty = () => {
       id: `${idBase || 'property'}-${uniqueSuffix}`,
       ownerId: currentUser.id,
       title: form.title.trim(),
-      location: [form.estate.trim(), form.town.trim(), form.county.trim()].filter(Boolean).join(', '),
+      county: form.county.trim(),
+      town: form.town.trim(),
+      estate: form.estate.trim(),
+      location: createPropertyLocation(form),
       address: form.address.trim(),
       googleMapsUrl: normaliseGoogleMapsUrl(form.googleMapsUrl),
       description: form.description.trim(),

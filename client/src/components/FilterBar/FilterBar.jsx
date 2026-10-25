@@ -1,7 +1,19 @@
 import './filterbar.css'
 
-const FilterBar = ({ filters, houseTypes, amenities, onChange, onReset }) => (
+const FilterBar = ({ filters, houseTypes, amenities, availabilityOptions, onAmenityToggle, onChange, onReset }) => (
   <form className="filter-bar" onSubmit={(event) => event.preventDefault()}>
+    <div className="filter-bar__field filter-bar__field--wide">
+      <label htmlFor="listing-keyword">Keyword</label>
+      <input
+        id="listing-keyword"
+        name="keyword"
+        type="search"
+        placeholder="Search title, description, or area"
+        value={filters.keyword}
+        onChange={onChange}
+      />
+    </div>
+
     <div className="filter-bar__field filter-bar__field--location">
       <label htmlFor="listing-location">Location</label>
       <input
@@ -41,6 +53,7 @@ const FilterBar = ({ filters, houseTypes, amenities, onChange, onReset }) => (
         <option value="25000">KES 25,000</option>
         <option value="35000">KES 35,000</option>
         <option value="50000">KES 50,000</option>
+        <option value="60000">KES 60,000</option>
       </select>
     </div>
 
@@ -52,16 +65,29 @@ const FilterBar = ({ filters, houseTypes, amenities, onChange, onReset }) => (
         <option value="1">1 bedroom</option>
         <option value="2">2 bedrooms</option>
         <option value="3">3 bedrooms</option>
+        <option value="4+">4+ bedrooms</option>
       </select>
     </div>
 
     <div className="filter-bar__field">
-      <label htmlFor="listing-amenity">Feature</label>
-      <select id="listing-amenity" name="amenity" value={filters.amenity} onChange={onChange}>
-        <option value="">Any feature</option>
-        {amenities.map((amenity) => <option key={amenity} value={amenity}>{amenity}</option>)}
+      <label htmlFor="listing-availability">Availability</label>
+      <select id="listing-availability" name="availability" value={filters.availability} onChange={onChange}>
+        <option value="">Any availability</option>
+        {availabilityOptions.map((availability) => <option key={availability} value={availability}>{availability}</option>)}
       </select>
     </div>
+
+    <fieldset className="filter-bar__amenities">
+      <legend>Features</legend>
+      <div>
+        {amenities.map((amenity) => (
+          <label key={amenity}>
+            <input checked={filters.amenities.includes(amenity)} onChange={() => onAmenityToggle(amenity)} type="checkbox" />
+            <span>{amenity}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
 
     <button className="filter-bar__reset" type="button" onClick={onReset}>Reset filters</button>
   </form>

@@ -3,7 +3,7 @@
   border: 0.1rem solid var(--color-border);
   display: grid;
   gap: 1.5rem;
-  grid-template-columns: 1.45fr repeat(5, minmax(12rem, 1fr)) auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   padding: 2rem;
 }
 
@@ -20,6 +20,44 @@
 .filter-bar__field select {
   font-size: 1.35rem;
   padding: 1.1rem 1rem;
+}
+
+.filter-bar__field--wide {
+  grid-column: span 2;
+}
+
+.filter-bar__amenities {
+  border: 0;
+  grid-column: span 3;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.filter-bar__amenities legend {
+  font-size: 1.25rem;
+  margin-bottom: 0.65rem;
+}
+
+.filter-bar__amenities > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.filter-bar__amenities label {
+  align-items: center;
+  background: var(--color-bg-soft);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 1.25rem;
+  gap: 0.55rem;
+  padding: 0.65rem 0.8rem;
+}
+
+.filter-bar__amenities input {
+  accent-color: var(--color-primary);
+  margin: 0;
 }
 
 .filter-bar__reset {
@@ -43,6 +81,10 @@
     grid-template-columns: repeat(3, 1fr);
   }
 
+  .filter-bar__amenities {
+    grid-column: span 2;
+  }
+
   .filter-bar__reset {
     justify-self: start;
   }
@@ -57,5 +99,10 @@
   .filter-bar__reset {
     margin-top: 0.3rem;
     width: 100%;
+  }
+
+  .filter-bar__field--wide,
+  .filter-bar__amenities {
+    grid-column: auto;
   }
 }

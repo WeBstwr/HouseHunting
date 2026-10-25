@@ -4,6 +4,7 @@ import { houseTypes, listingAmenities } from '../../data/listingData'
 import useAuthStore from '../../store/authStore'
 import useListingStore from '../../store/listingStore'
 import { isGoogleMapsUrl, normaliseGoogleMapsUrl } from '../../utils/googleMaps'
+import { createPropertyLocation, getPropertyLocationFields } from '../../utils/propertyLocation'
 import './editproperty.css'
 
 const MAX_IMAGES = 5
@@ -14,8 +15,7 @@ const toImageItems = (property) => [...new Set([...(property.images || []), prop
   .map((preview, index) => ({ id: `${property.id}-${index}`, name: `Property image ${index + 1}`, preview }))
 
 const createForm = (property) => {
-  const locationParts = typeof property.location === 'string' ? property.location.split(',').map((part) => part.trim()).filter(Boolean) : []
-  const hasCounty = locationParts.length > 1
+  const locationFields = getPropertyLocationFields(property)
 
   return {
     title: property.title || '',
@@ -25,9 +25,9 @@ const createForm = (property) => {
     bedrooms: Number.isInteger(property.bedroomCount) ? String(property.bedroomCount) : '',
     bathrooms: Number.isInteger(property.bathroomCount) ? String(property.bathroomCount) : '1',
     availability: property.availability || 'Available now',
-    county: property.county || (hasCounty ? locationParts.at(-1) : locationParts[0] || ''),
-    town: property.town || (hasCounty ? locationParts.at(-2) : locationParts[0] || ''),
-    estate: property.estate || (locationParts.length > 2 ? locationParts.slice(0, -2).join(', ') : ''),
+    county: locationFields.county,
+    town: locationFields.town,
+    estate: locationFields.estate,
     address: property.address || '',
     googleMapsUrl: property.googleMapsUrl || '',
   }
@@ -134,7 +134,10 @@ const EditProperty = () => {
     const bedroomCount = Number(form.bedrooms)
     const updates = {
       title: form.title.trim(),
-      location: [form.estate.trim(), form.town.trim(), form.county.trim()].filter(Boolean).join(', '),
+      county: form.county.trim(),
+      town: form.town.trim(),
+      estate: form.estate.trim(),
+      location: createPropertyLocation(form),
       address: form.address.trim(),
       googleMapsUrl: normaliseGoogleMapsUrl(form.googleMapsUrl),
       description: form.description.trim(),

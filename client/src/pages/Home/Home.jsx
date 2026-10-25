@@ -12,19 +12,20 @@ const Home = () => {
   const updateSearch = (event) => {
     const { name, value } = event.target
     setSearch((current) => ({ ...current, [name]: value }))
-    if (name === 'location' && value.trim()) setSearchError('')
+    if (value.trim()) setSearchError('')
   }
 
   const handleSearch = (event) => {
     event.preventDefault()
     const location = search.location.trim()
 
-    if (!location) {
-      setSearchError('Enter a location to begin your search.')
+    if (!location && !search.type && !search.price) {
+      setSearchError('Choose a location, house type, or maximum budget to begin your search.')
       return
     }
 
-    const parameters = new URLSearchParams({ location })
+    const parameters = new URLSearchParams()
+    if (location) parameters.set('location', location)
     if (search.type) parameters.set('type', search.type)
     if (search.price) parameters.set('price', search.price)
     navigate(`/listings?${parameters.toString()}`)
