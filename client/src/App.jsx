@@ -8,6 +8,8 @@ import EditProperty from "./pages/EditProperty/EditProperty";
 import LandlordDashboard from "./pages/LandlordDashboard/LandlordDashboard";
 import AgentDashboard from "./pages/AgentDashboard/AgentDashboard";
 import MyListings from "./pages/MyListings/MyListings";
+import SavedHouses from "./pages/SavedHouses/SavedHouses";
+import TenantDashboard from "./pages/TenantDashboard/TenantDashboard";
 import Login from "./components/Header/Login/Login";
 import Register from "./components/Header/Register/Register";
 import About from "./pages/About/About";
@@ -32,6 +34,8 @@ const App = () => {
         <Route path="/add-property" element={<ProtectedRoute allowedRoles="landlord"><AddProperty /></ProtectedRoute>} />
         <Route path="/landlord-dashboard" element={<ProtectedRoute allowedRoles="landlord"><LandlordDashboard /></ProtectedRoute>} />
         <Route path="/agent-dashboard" element={<ProtectedRoute allowedRoles="agent"><AgentDashboard /></ProtectedRoute>} />
+        <Route path="/tenant-dashboard" element={<ProtectedRoute allowedRoles="tenant"><TenantDashboard /></ProtectedRoute>} />
+        <Route path="/saved-houses" element={<ProtectedRoute allowedRoles="tenant"><SavedHouses /></ProtectedRoute>} />
         <Route path="/edit-property/:id" element={<ProtectedRoute allowedRoles={['landlord', 'agent']}><EditProperty /></ProtectedRoute>} />
         <Route path="/my-listings" element={<ProtectedRoute allowedRoles={['landlord', 'agent']}><MyListings /></ProtectedRoute>} />
       </Routes>

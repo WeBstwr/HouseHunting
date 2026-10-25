@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import PropertyCard from '../../components/PropertyCard/PropertyCard'
 import PropertyGallery from '../../components/PropertyGallery/PropertyGallery'
+import useAuthStore from '../../store/authStore'
 import useListingStore from '../../store/listingStore'
 import useSavedHouseStore from '../../store/savedHouseStore'
 import { normaliseGoogleMapsUrl } from '../../utils/googleMaps'
@@ -10,8 +11,9 @@ import './singlelisting.css'
 const SingleListing = () => {
   const { id } = useParams()
   const location = useLocation()
+  const user = useAuthStore((state) => state.user)
   const properties = useListingStore((state) => state.properties)
-  const savedPropertyIds = useSavedHouseStore((state) => state.savedPropertyIds)
+  const savedPropertyIdsByTenant = useSavedHouseStore((state) => state.savedPropertyIdsByTenant)
   const toggleSavedProperty = useSavedHouseStore((state) => state.toggleSavedProperty)
   const [contactNotice, setContactNotice] = useState('')
   const property = properties.find((listing) => listing.id === id)
@@ -47,6 +49,7 @@ const SingleListing = () => {
     )
   }
 
+  const savedPropertyIds = user?.role === 'tenant' ? savedPropertyIdsByTenant[user.id] || [] : []
   const isSaved = savedPropertyIds.includes(property.id)
   const description = property.description || `${property.title} is an available ${property.type.toLowerCase()} in ${property.location}. Review the property features, then arrange your next step when you are ready.`
   const listedDate = new Intl.DateTimeFormat('en-KE', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(property.createdAt))
@@ -74,9 +77,9 @@ const SingleListing = () => {
             <span>{property.bedrooms}</span>
           </div>
           <div className="single-listing__actions">
-            <button className="single-listing__save" type="button" onClick={() => toggleSavedProperty(property.id)} aria-pressed={isSaved}>
-              {isSaved ? 'Saved house' : 'Save house'}
-            </button>
+            {user?.role === 'tenant' && <button className={`single-listing__save${isSaved ? ' single-listing__save--active' : ''}`} type="button" onClick={() => toggleSavedProperty(user.id, property.id)} aria-pressed={isSaved}>
+              {isSaved ? 'Saved property' : 'Save property'}
+            </button>}
             <button className="single-listing__contact" type="button" onClick={() => setContactNotice('Landlord contact will be available once the tenant contact flow is enabled.')}>Contact landlord</button>
           </div>
           {contactNotice && <p className="single-listing__contact-notice" role="status">{contactNotice}</p>}

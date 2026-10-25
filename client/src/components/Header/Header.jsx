@@ -75,12 +75,15 @@ const Header = () => {
       )
     }
 
-    return (
+    if (user.role === 'tenant') return (
       <>
-        <span className="header__session-label">Tenant account</span>
+        <NavLink className="header__auth-link" onClick={closeOnMobile} to="/tenant-dashboard">Dashboard</NavLink>
+        <NavLink className="header__auth-link" onClick={closeOnMobile} to="/saved-houses">Saved properties</NavLink>
         <button className="header__logout" onClick={handleLogout} type="button">Log out</button>
       </>
     )
+
+    return null
   }
 
   return (

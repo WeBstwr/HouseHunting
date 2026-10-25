@@ -117,6 +117,21 @@
   color: var(--color-primary-dark);
 }
 
+.property-card__save {
+  background: transparent;
+  border: 0.1rem solid var(--color-primary);
+  border-radius: 0;
+  color: var(--color-primary);
+  font-size: 1.25rem;
+  padding: 0.65rem 0.9rem;
+}
+
+.property-card__save:hover,
+.property-card__save--active {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .property-card,
   .property-card__image {

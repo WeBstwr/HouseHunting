@@ -104,6 +104,11 @@
   background: var(--color-bg-soft);
 }
 
+.single-listing__save--active {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
 .single-listing__contact,
 .single-listing__primary-link {
   background: var(--color-primary);
